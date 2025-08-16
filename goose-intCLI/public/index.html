@@ -138,7 +138,7 @@
         
         .header-right {
             display: flex;
-            gap: 1rem;
+            gap: 0.5rem;
             align-items: center;
         }
         
@@ -355,13 +355,13 @@
         }
         
         .input-container button {
-            padding: 0.75rem 1.5rem;
+            padding: 1rem 2rem;
             background: var(--accent-primary);
             color: white;
             border: none;
             border-radius: 50px;
             cursor: pointer;
-            font-size: 0.875rem;
+            font-size: 0.9rem;
             font-weight: 500;
             white-space: nowrap;
             font-family: inherit;
@@ -383,23 +383,31 @@
         }
         
         .btn-secondary {
-            background: var(--text-muted) !important;
-            box-shadow: 0 2px 4px rgba(120, 113, 108, 0.2) !important;
+            background: var(--bg-tertiary) !important;
+            color: var(--text-primary) !important;
+            border: 1px solid var(--border-secondary) !important;
+            box-shadow: var(--shadow-sm) !important;
         }
         
         .btn-secondary:hover:not(:disabled) {
-            background: var(--text-tertiary) !important;
-            box-shadow: 0 4px 8px rgba(120, 113, 108, 0.3) !important;
+            background: var(--accent-primary) !important;
+            color: white !important;
+            border-color: var(--accent-primary) !important;
+            box-shadow: var(--shadow-md) !important;
         }
         
         .btn-danger {
             background: #dc2626 !important;
+            color: white !important;
+            border: 1px solid #dc2626 !important;
             box-shadow: 0 2px 4px rgba(220, 38, 38, 0.2) !important;
         }
         
         .btn-danger:hover:not(:disabled) {
             background: #b91c1c !important;
+            border-color: #b91c1c !important;
             box-shadow: 0 4px 8px rgba(220, 38, 38, 0.3) !important;
+            transform: translateY(-1px);
         }
 
         .btn-settings {
@@ -432,6 +440,8 @@
             background: var(--bg-tertiary) !important;
             border-color: var(--text-disabled) !important;
             font-family: ui-monospace, SFMono-Regular, 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace !important;
+            padding: 1rem 1.25rem !important;
+            font-size: 0.95rem !important;
         }
         
         .session-controls {
@@ -442,12 +452,13 @@
         
         .session-name-input {
             flex: 1;
-            padding: 0.75rem;
+            padding: 1rem 1.25rem;
             background: var(--bg-secondary);
             border: 1px solid var(--border-secondary);
             color: var(--text-primary);
             border-radius: 8px;
             font-family: inherit;
+            font-size: 0.95rem;
             transition: all 0.2s ease;
         }
 
@@ -718,24 +729,42 @@
 
         .button-group {
             display: flex;
-            gap: 0.5rem;
+            gap: 0.75rem;
             flex-wrap: wrap;
-            margin-top: 0.75rem;
+            margin-top: 1rem;
+        }
+        
+        .button-group button {
+            padding: 1rem 1.5rem;
+            font-size: 0.9rem;
+            min-height: 48px;
         }
 
         .command-controls {
             display: flex;
-            gap: 0.75rem;
+            gap: 1rem;
             align-items: end;
         }
 
         .command-controls input {
             flex: 1;
         }
+        
+        .command-controls button {
+            padding: 1rem 1.5rem;
+            font-size: 0.9rem;
+            min-height: 48px;
+        }
 
         .action-controls {
             display: flex;
-            gap: 0.75rem;
+            gap: 1rem;
+        }
+        
+        .action-controls button {
+            padding: 1rem 1.5rem;
+            font-size: 0.9rem;
+            min-height: 48px;
         }
 
         /* Mobile hamburger menu */
@@ -767,7 +796,7 @@
             transition: transform 0.3s ease;
             z-index: 1001;
             padding: 1rem 1.5rem;
-            display: none;
+            display: block;
         }
 
         .mobile-menu.show {
@@ -814,23 +843,31 @@
             border: 1px solid var(--border-primary);
         }
 
+        .mobile-menu-item.session-only {
+            justify-content: center;
+        }
+
         .mobile-menu-label {
             font-weight: 500;
             color: var(--text-primary);
         }
 
-        /* Mobile responsiveness */
+        /* Desktop and Mobile menu responsiveness */
+        @media (min-width: 769px) {
+            /* Desktop: Show mobile menu toggle, keep header-right visible */
+            .mobile-menu-toggle {
+                display: block;
+            }
+        }
+
         @media (max-width: 768px) {
-            /* Show mobile menu toggle, hide desktop header-right */
+            /* Mobile: Show mobile menu toggle */
             .mobile-menu-toggle {
                 display: block;
             }
 
-            .mobile-menu {
-                display: block;
-            }
-
-            .header-right {
+            /* Hide session status on mobile - it's in hamburger menu */
+            #gooseStatus {
                 display: none;
             }
 
@@ -875,7 +912,7 @@
             .mobile-settings-btn {
                 background: var(--accent-primary);
                 color: white;
-                border: none;
+                border: 1px solid var(--accent-primary);
                 padding: 0.75rem 1.5rem;
                 border-radius: 8px;
                 cursor: pointer;
@@ -883,11 +920,14 @@
                 font-weight: 500;
                 transition: all 0.2s ease;
                 width: 100%;
+                box-shadow: var(--shadow-sm);
             }
 
             .mobile-settings-btn:hover {
                 background: var(--accent-secondary);
+                border-color: var(--accent-secondary);
                 transform: translateY(-1px);
+                box-shadow: var(--shadow-md);
             }
         }
     </style>
@@ -904,13 +944,16 @@
             <div id="gooseStatus" class="goose-status status-inactive">
                 No Session Active
             </div>
-            <button id="settingsBtn" class="btn-settings" aria-label="Settings">⚙️</button>
+            <button id="mobileMenuToggle" class="mobile-menu-toggle" aria-label="Open menu">
+                ☰
+            </button>
+            <!-- Hidden elements for desktop use -->
+            <button id="settingsBtn" class="btn-settings" aria-label="Settings" style="display: none;">⚙️</button>
+            <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme" style="display: none;">
+                <span class="theme-icon-light">☀️</span>
+                <span class="theme-icon-dark">🌙</span>
+            </button>
         </div>
-        
-        <!-- Mobile menu toggle -->
-        <button id="mobileMenuToggle" class="mobile-menu-toggle" aria-label="Open menu">
-            ☰
-        </button>
     </div>
     
     <!-- Mobile Menu -->
@@ -924,8 +967,7 @@
         
         <div class="mobile-menu-items">
             <!-- Session Status -->
-            <div class="mobile-menu-item">
-                <span class="mobile-menu-label">Session Status</span>
+            <div class="mobile-menu-item session-only">
                 <div id="mobileGooseStatus" class="goose-status status-inactive">
                     No Session Active
                 </div>
