@@ -737,6 +737,159 @@
             display: flex;
             gap: 0.75rem;
         }
+
+        /* Mobile hamburger menu */
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: background 0.2s ease;
+            color: var(--text-primary);
+        }
+
+        .mobile-menu-toggle:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: var(--bg-primary);
+            border-bottom: 1px solid var(--border-primary);
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-100%);
+            transition: transform 0.3s ease;
+            z-index: 1001;
+            padding: 1rem 1.5rem;
+            display: none;
+        }
+
+        .mobile-menu.show {
+            transform: translateY(0);
+        }
+
+        .mobile-menu-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-primary);
+        }
+
+        .mobile-menu-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: background 0.2s ease;
+            color: var(--text-primary);
+        }
+
+        .mobile-menu-close:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .mobile-menu-items {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .mobile-menu-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem;
+            border-radius: 8px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-primary);
+        }
+
+        .mobile-menu-label {
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            /* Show mobile menu toggle, hide desktop header-right */
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            .mobile-menu {
+                display: block;
+            }
+
+            .header-right {
+                display: none;
+            }
+
+            /* Hide send button on mobile */
+            .input-container button#sendBtn {
+                display: none;
+            }
+
+            /* Adjust chat container padding */
+            .chat-container {
+                padding: 0 0.75rem;
+            }
+
+            /* Adjust input container for mobile */
+            .input-container {
+                padding: 1rem;
+            }
+
+            /* Make status display full width in mobile menu */
+            .mobile-menu-item .goose-status {
+                margin: 0;
+                flex: 1;
+                text-align: center;
+            }
+
+            /* Adjust header padding */
+            .header {
+                padding: 1rem;
+            }
+
+            /* Smaller logo on mobile */
+            .logo {
+                width: 28px;
+                height: 28px;
+            }
+
+            .header h1 {
+                font-size: 1.25rem;
+            }
+
+            /* Settings button in mobile menu */
+            .mobile-settings-btn {
+                background: var(--accent-primary);
+                color: white;
+                border: none;
+                padding: 0.75rem 1.5rem;
+                border-radius: 8px;
+                cursor: pointer;
+                font-size: 0.875rem;
+                font-weight: 500;
+                transition: all 0.2s ease;
+                width: 100%;
+            }
+
+            .mobile-settings-btn:hover {
+                background: var(--accent-secondary);
+                transform: translateY(-1px);
+            }
+        }
     </style>
 </head>
 <body>
@@ -751,10 +904,48 @@
             <div id="gooseStatus" class="goose-status status-inactive">
                 No Session Active
             </div>
-            <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
-                <span class="theme-icon-light">☀️</span>
-                <span class="theme-icon-dark">🌙</span>
+            <button id="settingsBtn" class="btn-settings" aria-label="Settings">⚙️</button>
+        </div>
+        
+        <!-- Mobile menu toggle -->
+        <button id="mobileMenuToggle" class="mobile-menu-toggle" aria-label="Open menu">
+            ☰
+        </button>
+    </div>
+    
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="mobile-menu">
+        <div class="mobile-menu-header">
+            <h3 style="color: var(--text-primary); margin: 0;">Menu</h3>
+            <button id="mobileMenuClose" class="mobile-menu-close" aria-label="Close menu">
+                ×
             </button>
+        </div>
+        
+        <div class="mobile-menu-items">
+            <!-- Session Status -->
+            <div class="mobile-menu-item">
+                <span class="mobile-menu-label">Session Status</span>
+                <div id="mobileGooseStatus" class="goose-status status-inactive">
+                    No Session Active
+                </div>
+            </div>
+            
+            <!-- Theme Toggle -->
+            <div class="mobile-menu-item">
+                <span class="mobile-menu-label">Theme</span>
+                <button id="mobileThemeToggle" class="theme-toggle" aria-label="Toggle theme">
+                    <span class="theme-icon-light">☀️ Light</span>
+                    <span class="theme-icon-dark">🌙 Dark</span>
+                </button>
+            </div>
+            
+            <!-- Settings -->
+            <div class="mobile-menu-item">
+                <button id="mobileSettingsBtn" class="mobile-settings-btn">
+                    ⚙️ Settings
+                </button>
+            </div>
         </div>
     </div>
     
@@ -766,7 +957,6 @@
             <div class="input-row">
                 <input type="text" id="messageInput" placeholder="Type your message to Goose..." maxlength="2000">
                 <button id="sendBtn">Send</button>
-                <button id="settingsBtn" class="btn-settings" aria-label="Settings">⚙️</button>
             </div>
         </div>
     </div>
@@ -866,6 +1056,14 @@
                 this.settingsBtn = document.getElementById('settingsBtn');
                 this.closeSettingsModal = document.getElementById('closeSettingsModal');
                 
+                // Mobile menu elements
+                this.mobileMenu = document.getElementById('mobileMenu');
+                this.mobileMenuToggle = document.getElementById('mobileMenuToggle');
+                this.mobileMenuClose = document.getElementById('mobileMenuClose');
+                this.mobileGooseStatus = document.getElementById('mobileGooseStatus');
+                this.mobileThemeToggle = document.getElementById('mobileThemeToggle');
+                this.mobileSettingsBtn = document.getElementById('mobileSettingsBtn');
+                
                 this.currentGooseStatus = null;
                 this.setupTheme();
                 this.setupEventListeners();
@@ -886,13 +1084,16 @@
                     this.updateFavicon(true);
                 }
                 
-                // Setup theme toggle
-                this.themeToggle.addEventListener('click', () => {
+                // Setup theme toggles (desktop and mobile)
+                const toggleTheme = () => {
                     document.body.classList.toggle('dark-theme');
                     const isDark = document.body.classList.contains('dark-theme');
                     localStorage.setItem('goose-theme', isDark ? 'dark' : 'light');
                     this.updateFavicon(isDark);
-                });
+                };
+                
+                this.themeToggle.addEventListener('click', toggleTheme);
+                this.mobileThemeToggle.addEventListener('click', toggleTheme);
             }
             
             updateFavicon(isDark) {
@@ -951,6 +1152,25 @@
                         this.sendGooseCommand();
                     }
                 });
+                
+                // Mobile menu event listeners
+                this.mobileMenuToggle.addEventListener('click', () => this.showMobileMenu());
+                this.mobileMenuClose.addEventListener('click', () => this.hideMobileMenu());
+                this.mobileGooseStatus.addEventListener('click', () => {
+                    this.hideMobileMenu();
+                    this.showSessionModal();
+                });
+                this.mobileSettingsBtn.addEventListener('click', () => {
+                    this.hideMobileMenu();
+                    this.showSettingsModal();
+                });
+                
+                // Close mobile menu when clicking outside
+                this.mobileMenu.addEventListener('click', (e) => {
+                    if (e.target === this.mobileMenu) {
+                        this.hideMobileMenu();
+                    }
+                });
             }
             
             setupSocketListeners() {
@@ -990,13 +1210,24 @@
             
             updateGooseStatus(status) {
                 const statusEl = this.gooseStatus;
+                const mobileStatusEl = this.mobileGooseStatus;
                 
                 if (status.active) {
-                    statusEl.textContent = `Active (${status.sessionName || 'Unknown'})`;
-                    statusEl.className = 'goose-status status-active';
+                    const statusText = `Active (${status.sessionName || 'Unknown'})`;
+                    const statusClass = 'goose-status status-active';
+                    
+                    statusEl.textContent = statusText;
+                    statusEl.className = statusClass;
+                    mobileStatusEl.textContent = statusText;
+                    mobileStatusEl.className = statusClass;
                 } else {
-                    statusEl.textContent = 'No Session Active';
-                    statusEl.className = 'goose-status status-inactive';
+                    const statusText = 'No Session Active';
+                    const statusClass = 'goose-status status-inactive';
+                    
+                    statusEl.textContent = statusText;
+                    statusEl.className = statusClass;
+                    mobileStatusEl.textContent = statusText;
+                    mobileStatusEl.className = statusClass;
                 }
                 
                 this.updateGooseControls(status.active);
@@ -1285,6 +1516,18 @@
             
             hideSettingsModal() {
                 this.settingsModal.classList.remove('show');
+            }
+            
+            showMobileMenu() {
+                this.mobileMenu.classList.add('show');
+                // Prevent body scrolling when menu is open
+                document.body.style.overflow = 'hidden';
+            }
+            
+            hideMobileMenu() {
+                this.mobileMenu.classList.remove('show');
+                // Restore body scrolling
+                document.body.style.overflow = '';
             }
             
             populateSessionList(sessions) {
